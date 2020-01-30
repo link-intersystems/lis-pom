@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.link_intersystems</groupId>
 	<artifactId>lis-pom</artifactId>
-	<version>1</version>
+	<version>2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Link Intersystems Base POM</name>
 
@@ -14,7 +14,7 @@
 		<connection>scm:git:https://github.com/link-intersystems/lis-pom.git</connection>
 		<developerConnection>scm:git:https://github.com/link-intersystems/lis-pom.git</developerConnection>
 		<url>https://github.com/link-intersystems/lis-pom</url>
-	  <tag>lis-pom-1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<issueManagement>
