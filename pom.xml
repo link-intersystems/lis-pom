@@ -1,0 +1,185 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.link_intersystems</groupId>
+	<artifactId>lis-pom</artifactId>
+	<version>1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Link Intersystems Base POM</name>
+
+	<properties>
+		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+	</properties>
+
+	<scm>
+		<connection>scm:git:https://github.com/link-intersystems/lis-pom.git</connection>
+		<developerConnection>scm:git:https://github.com/link-intersystems/lis-pom.git</developerConnection>
+		<url>https://github.com/link-intersystems/lis-pom</url>
+	</scm>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/link-intersystems/lis-pom/issues</url>
+	</issueManagement>
+
+	<organization>
+		<name>Link Intersystems GmbH</name>
+		<url>http://www.link-intersystems.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>renelink</id>
+			<name>René Link</name>
+			<organization>Link Intersystems GmbH</organization>
+			<organizationUrl>http://www.link-intersystems.com</organizationUrl>
+			<email>rene.link@link-intersystems.com</email>
+			<timezone>Europe/Berlin</timezone>
+			<url>http://stackoverflow.com/users/974186/ren%C3%A9-link</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<distributionManagement>
+		<repository>
+			<id>link-intersystems-releases</id>
+			<layout>default</layout>
+			<name>Link Intersystem Releases</name>
+			<url>https://nexus.link-intersystems.com/repository/open-source-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>link-intersystems-snapshots</id>
+			<layout>default</layout>
+			<name>Link Intersystem Snapshots</name>
+			<url>https://nexus.link-intersystems.com/repository/open-source-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>sonar</id>
+
+			<properties>
+				<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+				<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+				<sonar.jacoco.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPath>
+				<sonar.language>java</sonar.language>
+			</properties>
+
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>2.20</version>
+							<configuration>
+								<!-- Sets the VM argument line used when unit tests are run. -->
+								<argLine>${surefireArgLine}</argLine>
+								<properties>
+									<property>
+										<name>listener</name>
+										<value>org.sonar.java.jacoco.JUnitListener</value>
+									</property>
+								</properties>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.7.5.201505241946</version>
+						<executions>
+							<!-- Prepares the property pointing to the JaCoCo runtime agent which 
+								is passed as VM argument when Maven the Surefire plugin is executed. -->
+							<execution>
+								<id>pre-unit-test</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+								<configuration>
+									<!-- Sets the path to the file which contains the execution data. -->
+									<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+									<!-- Sets the name of the property containing the settings for JaCoCo 
+										runtime agent. -->
+									<propertyName>surefireArgLine</propertyName>
+								</configuration>
+							</execution>
+							<!-- Ensures that the code coverage report for unit tests is created 
+								after unit tests have been run. -->
+							<execution>
+								<id>post-unit-test</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+								<configuration>
+									<!-- Sets the path to the file which contains the execution data. -->
+									<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+									<!-- Sets the output directory for the code coverage report. -->
+									<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.sonarsource.java</groupId>
+					<artifactId>sonar-jacoco-listeners</artifactId>
+					<version>3.8</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>
