@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.link_intersystems</groupId>
 	<artifactId>lis-pom</artifactId>
@@ -8,14 +10,15 @@
 
 	<properties>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+		<project.scm.id>scm</project.scm.id>
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://github.com/link-intersystems/lis-pom.git</connection>
-		<developerConnection>scm:git:https://github.com/link-intersystems/lis-pom.git</developerConnection>
+		<connection>scm:git:${env.GIT_REPO_URL}</connection>
+		<developerConnection>scm:git:${env.GIT_REPO_URL}</developerConnection>
 		<url>https://github.com/link-intersystems/lis-pom</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<issueManagement>
 		<system>github</system>
@@ -53,13 +56,13 @@
 
 	<distributionManagement>
 		<repository>
-			<id>link-intersystems-releases</id>
+			<id>releases</id>
 			<layout>default</layout>
 			<name>Link Intersystem Releases</name>
 			<url>https://nexus.link-intersystems.com/repository/open-source-releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>link-intersystems-snapshots</id>
+			<id>snapshots</id>
 			<layout>default</layout>
 			<name>Link Intersystem Snapshots</name>
 			<url>https://nexus.link-intersystems.com/repository/open-source-snapshots/</url>
@@ -137,7 +140,7 @@
 						<artifactId>jacoco-maven-plugin</artifactId>
 						<version>0.7.5.201505241946</version>
 						<executions>
-							<!-- Prepares the property pointing to the JaCoCo runtime agent which 
+							<!-- Prepares the property pointing to the JaCoCo runtime agent which
 								is passed as VM argument when Maven the Surefire plugin is executed. -->
 							<execution>
 								<id>pre-unit-test</id>
@@ -147,12 +150,12 @@
 								<configuration>
 									<!-- Sets the path to the file which contains the execution data. -->
 									<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-									<!-- Sets the name of the property containing the settings for JaCoCo 
+									<!-- Sets the name of the property containing the settings for JaCoCo
 										runtime agent. -->
 									<propertyName>surefireArgLine</propertyName>
 								</configuration>
 							</execution>
-							<!-- Ensures that the code coverage report for unit tests is created 
+							<!-- Ensures that the code coverage report for unit tests is created
 								after unit tests have been run. -->
 							<execution>
 								<id>post-unit-test</id>
